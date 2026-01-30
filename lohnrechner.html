@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<title>Lohnrechner 1.0</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2d3748">
+<meta name="description" content="Lohnrechner - Maaş Hesaplayıcı">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+
+<style>
+* {
+    box-sizing: border-box;
+}
+body {
+    font-family: 'Segoe UI', Arial, sans-serif;
+    background: #f5f7fa;
+    padding: 10px;
+    min-height: 100vh;
+    margin: 0;
+}
+.container {
+    max-width: 950px;
+    margin: 0 auto;
+}
+h2 { 
+    text-align: center; 
+    color: #2d3748;
+    margin-top: 20px;
+    margin-bottom: 5px;
+    font-size: 28px;
+}
+.subtitle {
+    text-align: center;
+    color: #718096;
+    font-size: 15px;
+    font-style: italic;
+    margin-bottom: 30px;
+}
+
+table {
+    width: 100%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+    font-size: 15px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+th, td {
+    border: 1px solid #e2e8f0;
+    padding: 12px 8px;
+    text-align: right;
+}
+th {
+    background: #2d3748;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+    font-size: 16px;
+}
+td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 15px;
+}
+.input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.input-label {
+    font-size: 13px;
+    color: #4a5568;
+    font-weight: normal;
+}
+input {
+    width: 90px;
+    padding: 8px;
+    text-align: right;
+    border: 2px solid #cbd5e0;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.3s;
+}
+input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+.total {
+    background: #48bb78;
+    color: white;
+    font-size: 17px;
+    font-weight: bold;
+}
+.abzug {
+    background: #fff5f5;
+}
+.abzug td {
+    color: #c53030;
+}
+.section-header {
+    background: #2d3748;
+    color: white;
+    font-size: 17px;
+}
+.netto-final {
+    background: #38b2ac;
+    color: white;
+    font-size: 19px;
+    font-weight: bold;
+}
+.signature {
+    text-align: center;
+    margin: 30px auto 50px auto;
+    padding: 20px;
+    background: white;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border-radius: 8px;
+}
+.signature p {
+    margin: 5px 0;
+    color: #718096;
+    font-size: 14px;
+}
+.signature .name {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2d3748;
+    margin-top: 10px;
+}
+
+.install-prompt {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2d3748;
+    color: white;
+    padding: 15px 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    display: none;
+    z-index: 1000;
+    max-width: 90%;
+}
+.install-prompt button {
+    background: #48bb78;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    margin: 10px 5px 0;
+    font-size: 14px;
+    cursor: pointer;
+}
+.install-prompt button:last-child {
+    background: #718096;
+}
+
+@media (max-width: 600px) {
+    table { 
+        font-size: 14px;
+    }
+    th, td {
+        padding: 10px 6px;
+    }
+    input { 
+        width: 75px;
+        padding: 6px;
+        font-size: 14px;
+    }
+    h2 { 
+        font-size: 24px; 
+    }
+    .subtitle {
+        font-size: 14px;
+    }
+    td:first-child {
+        font-size: 14px;
+    }
+    .input-label {
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>📱 Lohnrechner 1.0</h2>
+<div class="subtitle">Entwickelt von Ayhan Karataş</div>
+
+<!-- ================= GELİRLER TABLOSU ================= -->
+<table>
+<tr class="section-header">
+    <th colspan="4">📊 Einnahmen / Gelirler</th>
+</tr>
+<tr>
+    <th>Art</th>
+    <th>Basis €/Std</th>
+    <th>Stunden</th>
+    <th>Betrag €</th>
+</tr>
+
+<tr>
+    <td>Grundgehalt & Stundenlohn</td>
+    <td colspan="2">
+        <div class="input-group">
+            <div>
+                <div class="input-label">Grundgehalt:</div>
+                <input id="grundgehalt" type="number" step="0.01" value="0">
+            </div>
+            <div>
+                <div class="input-label">€/Std:</div>
+                <input id="ucret" type="number" step="0.01" value="0">
+            </div>
+        </div>
+    </td>
+    <td id="t_grund">0.00</td>
+</tr>
+
+<tr>
+    <td>Sonntag +50%</td>
+    <td id="u_50">0.00</td>
+    <td><input id="s_50" type="number" value="0"></td>
+    <td id="t_50">0.00</td>
+</tr>
+
+<tr>
+    <td>Nacht +25%</td>
+    <td id="u_25">0.00</td>
+    <td><input id="s_25" type="number" value="0"></td>
+    <td id="t_25">0.00</td>
+</tr>
+
+<tr>
+    <td>Nacht +40%</td>
+    <td id="u_40">0.00</td>
+    <td><input id="s_40" type="number" value="0"></td>
+    <td id="t_40">0.00</td>
+</tr>
+
+<tr>
+    <td>Feiertag +125%</td>
+    <td id="u_125">0.00</td>
+    <td><input id="s_125" type="number" value="0"></td>
+    <td id="t_125">0.00</td>
+</tr>
+
+<tr>
+    <td>Feiertag +150%</td>
+    <td id="u_150">0.00</td>
+    <td><input id="s_150" type="number" value="0"></td>
+    <td id="t_150">0.00</td>
+</tr>
+
+<tr>
+    <td>Überstunden (100%)</td>
+    <td id="u_100">0.00</td>
+    <td><input id="s_100" type="number" value="0"></td>
+    <td id="t_100">0.00</td>
+</tr>
+
+<tr>
+    <td>Überstunden +25% Zuschlag</td>
+    <td id="u_100_25">0.00</td>
+    <td id="s_100_anzeige">0</td>
+    <td id="t_100_25">0.00</td>
+</tr>
+
+<tr>
+    <td>Fahrtkosten</td>
+    <td colspan="2"></td>
+    <td><input id="fahrt" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr>
+    <td>Rüstung</td>
+    <td colspan="2"></td>
+    <td><input id="rustung" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="total">
+    <td colspan="3">💰 GESAMT BRUTTO</td>
+    <td id="brutto">0.00</td>
+</tr>
+</table>
+
+<!-- ================= GİDERLER TABLOSU ================= -->
+<table>
+<tr class="section-header">
+    <th colspan="4">📉 Abzüge / Giderler</th>
+</tr>
+<tr>
+    <th>Art</th>
+    <th colspan="2"></th>
+    <th>Betrag €</th>
+</tr>
+
+<tr class="abzug">
+    <td>Lohnsteuer</td>
+    <td colspan="2"></td>
+    <td><input id="lohnsteuer" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="abzug">
+    <td>Kirchensteuer</td>
+    <td colspan="2"></td>
+    <td><input id="kirche" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="abzug">
+    <td>Solidaritätszuschlag</td>
+    <td colspan="2"></td>
+    <td><input id="soli" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="abzug">
+    <td>Krankenversicherung (KV)</td>
+    <td colspan="2"></td>
+    <td><input id="kv" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="abzug">
+    <td>Rentenversicherung (RV)</td>
+    <td colspan="2"></td>
+    <td><input id="rv" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="abzug">
+    <td>Arbeitslosenversicherung (AV)</td>
+    <td colspan="2"></td>
+    <td><input id="av" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="abzug">
+    <td>Pflegeversicherung (PV)</td>
+    <td colspan="2"></td>
+    <td><input id="pv" type="number" step="0.01" value="0"></td>
+</tr>
+
+<tr class="total">
+    <td colspan="3">📊 Gesamt Abzüge</td>
+    <td id="abzuege">0.00</td>
+</tr>
+
+<tr class="netto-final">
+    <td colspan="3">✨ NETTO</td>
+    <td id="netto">0.00</td>
+</tr>
+</table>
+
+<!-- ================= İMZA KISMI ================= -->
+<div class="signature">
+    <p class="name">Entwickelt von Ayhan Karataş</p>
+    <p style="font-size: 13px; margin-top: 10px;">Version 1.0 | <span id="tarih"></span></p>
+</div>
+
+</div>
+
+<!-- Install Prompt -->
+<div class="install-prompt" id="installPrompt">
+    <p>📲 Uygulamayı telefonunuza yükleyin!</p>
+    <button id="installBtn">Yükle</button>
+    <button id="cancelBtn">Şimdi Değil</button>
+</div>
+
+<script>
+function r(x) {
+    return Math.round(x * 100) / 100;
+}
+
+function calc() {
+    // GELİR HESAPLAMA
+    let basis = parseFloat(ucret.value) || 0;
+    let grund = parseFloat(grundgehalt.value) || 0;
+    let s100 = parseFloat(s_100.value) || 0;
+
+    // Ücret oranlarını göster
+    u_25.innerText  = r(basis * 0.25).toFixed(2);
+    u_40.innerText  = r(basis * 0.40).toFixed(2);
+    u_50.innerText  = r(basis * 0.50).toFixed(2);
+    u_100.innerText = r(basis).toFixed(2);
+    u_125.innerText = r(basis * 1.25).toFixed(2);
+    u_150.innerText = r(basis * 1.50).toFixed(2);
+    u_100_25.innerText = r(basis * 0.25).toFixed(2);
+
+    // Toplam brüt hesaplama
+    let sum = grund;
+    t_grund.innerText = r(grund).toFixed(2);
+
+    [["25",0.25],["40",0.40],["50",0.50],["100",1],["125",1.25],["150",1.5]]
+    .forEach(z=>{
+        let s = parseFloat(document.getElementById("s_"+z[0]).value)||0;
+        let t = basis*z[1]*s;
+        document.getElementById("t_"+z[0]).innerText = r(t).toFixed(2);
+        sum += t;
+    });
+
+    // Überstunden +25% otomatik
+    s_100_anzeige.innerText = s100;
+    let t25 = basis * 0.25 * s100;
+    t_100_25.innerText = r(t25).toFixed(2);
+    sum += t25;
+
+    sum += parseFloat(fahrt.value)||0;
+    sum += parseFloat(rustung.value)||0;
+
+    // Brüt toplamı göster
+    let bruttoTotal = r(sum);
+    brutto.innerText = bruttoTotal.toFixed(2);
+
+    // GİDER HESAPLAMA
+    let abzugIds = ["lohnsteuer","kirche","soli","kv","rv","av","pv"];
+    let abzugSum = 0;
+    abzugIds.forEach(id=>{
+        abzugSum += parseFloat(document.getElementById(id).value) || 0;
+    });
+    
+    abzuege.innerText = r(abzugSum).toFixed(2);
+    
+    // NET HESAPLAMA
+    let nettoTotal = r(bruttoTotal - abzugSum);
+    netto.innerText = nettoTotal.toFixed(2);
+    
+    // Save to localStorage
+    saveData();
+}
+
+// LocalStorage - Verileri kaydet
+function saveData() {
+    const data = {
+        grundgehalt: grundgehalt.value,
+        ucret: ucret.value,
+        s_50: s_50.value,
+        s_25: s_25.value,
+        s_40: s_40.value,
+        s_125: s_125.value,
+        s_150: s_150.value,
+        s_100: s_100.value,
+        fahrt: fahrt.value,
+        rustung: rustung.value,
+        lohnsteuer: lohnsteuer.value,
+        kirche: kirche.value,
+        soli: soli.value,
+        kv: kv.value,
+        rv: rv.value,
+        av: av.value,
+        pv: pv.value
+    };
+    localStorage.setItem('lohnrechnerData', JSON.stringify(data));
+}
+
+// LocalStorage - Verileri yükle
+function loadData() {
+    const saved = localStorage.getItem('lohnrechnerData');
+    if (saved) {
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach(key => {
+            const element = document.getElementById(key);
+            if (element) element.value = data[key];
+        });
+    }
+}
+
+// Tarihi göster
+document.getElementById("tarih").innerText = new Date().toLocaleDateString("de-DE");
+
+// Tüm inputlara event listener ekle
+document.querySelectorAll("input").forEach(i =>
+    i.addEventListener("input", calc)
+);
+
+// PWA Install
+let deferredPrompt;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredPrompt = e;
+    document.getElementById('installPrompt').style.display = 'block';
+});
+
+document.getElementById('installBtn').addEventListener('click', async () => {
+    if (deferredPrompt) {
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        deferredPrompt = null;
+        document.getElementById('installPrompt').style.display = 'none';
+    }
+});
+
+document.getElementById('cancelBtn').addEventListener('click', () => {
+    document.getElementById('installPrompt').style.display = 'none';
+});
+
+// Service Worker kaydet
+if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js');
+}
+
+// Verileri yükle ve hesapla
+loadData();
+calc();
+</script>
+
+</body>
+</html>

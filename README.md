@@ -1,43 +1,84 @@
-# Next.js on Netlify Platform Starter
+# 📱 Lohnrechner 1.0 - PWA Kurulum Talimatları
 
-[Live Demo](https://nextjs-platform-starter.netlify.app/)
+## 🎯 Ne Yaptık?
 
-A modern starter based on Next.js 16 (App Router), Tailwind, and [Netlify Core Primitives](https://docs.netlify.com/core/overview/#develop) (Edge Functions, Image CDN, Blob Store).
+HTML maaş hesaplayıcınızı **Progressive Web App (PWA)** haline getirdik. Artık telefonunuza gerçek bir uygulama gibi yükleyebilirsiniz!
 
-In this site, Netlify Core Primitives are used both implictly for running Next.js features (e.g. Route Handlers, image optimization via `next/image`, and more) and also explicitly by the user code.
+## 📦 Dosyalar
 
-Implicit usage means you're using any Next.js functionality and everything "just works" when deployed - all the plumbing is done for you. Explicit usage is framework-agnostic and typically provides more features than what Next.js exposes.
+- **lohnrechner.html** - Ana uygulama dosyası
+- **manifest.json** - Uygulama ayarları
+- **sw.js** - Service Worker (offline çalışma)
+- **icon-192.png** - Küçük ikon
+- **icon-512.png** - Büyük ikon
 
-## Deploying to Netlify
+## 🚀 Telefona Nasıl Yüklenir?
 
-Click the button below to deploy this template to your Netlify account.
+### Yöntem 1: Web Sunucusu ile (Tavsiye Edilen)
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/netlify-templates/next-platform-starter)
+1. **Dosyaları bir web sunucusuna yükleyin:**
+   - GitHub Pages (ücretsiz)
+   - Netlify (ücretsiz)
+   - Vercel (ücretsiz)
+   - Kendi web siteniz
 
-## Developing Locally
+2. **Telefonda açın:**
+   - Chrome veya Safari ile siteyi açın
+   - "Ana ekrana ekle" / "Install App" butonuna tıklayın
+   - ✅ Uygulama yüklendi!
 
-1. Clone this repository, then run `npm install` in its root directory.
+### Yöntem 2: GitHub Pages (En Kolay - Ücretsiz)
 
-2. For the starter to have full functionality locally (e.g. edge functions, blob store), please ensure you have an up-to-date version of Netlify CLI. Run:
+1. GitHub hesabı oluşturun (github.com)
+2. Yeni repository oluşturun (isim: lohnrechner)
+3. Tüm 5 dosyayı yükleyin
+4. Settings → Pages → Branch: main → Save
+5. 2 dakika bekleyin
+6. https://KULLANICI_ADI.github.io/lohnrechner/lohnrechner.html
+7. Telefonda bu linki açın ve "Ana ekrana ekle"
 
-```
-npm install netlify-cli@latest -g
-```
+### Yöntem 3: Netlify (Çok Kolay - Ücretsiz)
 
-3. Link your local repository to the deployed Netlify site. This will ensure you're using the same runtime version for both local development and your deployed site.
+1. netlify.com'a gidin
+2. "Add new site" → "Deploy manually"
+3. Tüm 5 dosyayı sürükle bırak
+4. Link gelecek (örn: random-name.netlify.app)
+5. Telefonda aç ve "Ana ekrana ekle"
 
-```
-netlify link
-```
+## ✨ Yeni Özellikler
 
-4. Then, run the Next.js development server via Netlify CLI:
+✅ **Offline Çalışma** - İnternet olmadan da kullanabilirsiniz
+✅ **Veri Kaydetme** - Girdiğiniz veriler telefonda saklanır
+✅ **Ana Ekranda İkon** - Gerçek uygulama gibi
+✅ **Tam Ekran Mod** - Tarayıcı çubukları olmadan
+✅ **Hızlı Açılış** - İkinci açılışta çok hızlı
 
-```
-netlify dev
-```
+## 📱 Android & iOS Uyumlu
 
-If your browser doesn't navigate to the site automatically, visit [localhost:8888](http://localhost:8888).
+- ✅ Chrome (Android)
+- ✅ Safari (iPhone)
+- ✅ Edge
+- ✅ Samsung Internet
 
-## Resources
+## 🔧 Test Etmek İçin (Bilgisayarda)
 
-- Check out the [Next.js on Netlify docs](https://docs.netlify.com/frameworks/next-js/overview/)
+1. Chrome'da `lohnrechner.html` dosyasını açın
+2. F12 → Application → Manifest kontrol edin
+3. Lighthouse → PWA testi yapın
+
+## 📞 Sorular?
+
+Ayhan Karataş tarafından geliştirildi
+Version 1.0 - Ocak 2026
+
+---
+
+## 🎓 Teknik Detaylar
+
+- **Teknoloji:** Progressive Web App
+- **Framework:** Vanilla JavaScript (framework yok)
+- **Storage:** LocalStorage (veriler tarayıcıda)
+- **Offline:** Service Worker ile cache
+- **Responsive:** Mobil uyumlu tasarım
+
+**Not:** HTTPS gerekli! GitHub Pages, Netlify, Vercel otomatik HTTPS sağlar.
